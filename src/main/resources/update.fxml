@@ -8,6 +8,6 @@
    <children>
       <Label layoutX="79.0" layoutY="42.0" text="Sysma is aan het updaten..." />
       <ProgressBar fx:id="progressBarUpdating" layoutX="50.0" layoutY="84.0" prefWidth="200.0" progress="0.0" />
-      <Label fx:id="labelVersion" layoutX="1.0" layoutY="145.0" text="VERSION" />
+      <Label fx:id="labelVersion" layoutX="5.0" layoutY="131.0" text="VERSION" />
    </children>
 </Pane>

@@ -8,11 +8,10 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import sysmaUpdater.controllers.IUpdateController;
 import sysmaUpdater.customExceptions.UpdateException;
+import sysmaUpdater.messageBox.CustomOkMessage;
 import sysmaUpdater.models.Error;
 import sysmaUpdater.models.JsonUpdateObject;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URISyntaxException;
 
 public class Updater
@@ -78,9 +77,29 @@ public class Updater
         }
     }
 
+    private void killSysma()
+    {
+        try
+        {
+            File SysmaPID = new File(System.getProperty("java.io.tmpdir") + "SysmaPID.txt");
+            BufferedReader reader = new BufferedReader(new FileReader(SysmaPID));
+            String pid = reader.readLine();
+            reader.close();
+            Runtime.getRuntime().exec("cmd /c taskkill /F /PID " + pid);
+            SysmaPID.delete();
+        }
+        catch (Exception e)
+        {
+            new CustomOkMessage(null, "Cannot kill Sysma").show();
+            e.printStackTrace();
+        }
+    }
+
     private void deleteOldVersion() throws UpdateException
     {
-        if (!new File(System.getProperty("user.home") + "\\Desktop\\Sysma.exe").delete()) throw new UpdateException(Error.U_0x04);
+        this.killSysma();
+        File oldSysma = new File(System.getProperty("user.home") + "\\Desktop\\Sysma.exe");
+        if (!oldSysma.delete()) throw new UpdateException(Error.U_0x04);
     }
 
     public void runSysma() throws UpdateException
